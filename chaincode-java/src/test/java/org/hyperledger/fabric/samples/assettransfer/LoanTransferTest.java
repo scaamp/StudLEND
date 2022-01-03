@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 
-public final class AssetTransferTest {
+public final class LoanTransferTest {
 
     private final class MockKeyValue implements KeyValue {
 
@@ -106,10 +106,10 @@ public final class AssetTransferTest {
     }
 
     @Nested
-    class InvokeReadAssetTransaction {
+    class InvokeReadLoanTransaction {
 
         @Test
-        public void whenAssetExists() {
+        public void whenLoanExists() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -123,7 +123,7 @@ public final class AssetTransferTest {
         }
 
         @Test
-        public void whenAssetDoesNotExist() {
+        public void whenLoanDoesNotExist() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -159,10 +159,10 @@ public final class AssetTransferTest {
     }
 
     @Nested
-    class InvokeCreateAssetTransaction {
+    class InvokeCreateLoanTransaction {
 
         @Test
-        public void whenAssetExists() {
+        public void whenLoanExists() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -180,7 +180,7 @@ public final class AssetTransferTest {
         }
 
         @Test
-        public void whenAssetDoesNotExist() {
+        public void whenLoanDoesNotExist() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -194,7 +194,7 @@ public final class AssetTransferTest {
     }
 
     @Test
-    void invokeGetAllAssetsTransaction() {
+    void invokeGetAllLoanTransaction() {
         AssetTransfer contract = new AssetTransfer();
         Context ctx = mock(Context.class);
         ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -213,10 +213,10 @@ public final class AssetTransferTest {
     }
 
     @Nested
-    class TransferAssetTransaction {
+    class TransferLoanTransaction {
 
         @Test
-        public void whenAssetExists() {
+        public void whenLoanExists() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -230,7 +230,7 @@ public final class AssetTransferTest {
         }
 
         @Test
-        public void whenAssetDoesNotExist() {
+        public void whenLoanDoesNotExist() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -248,10 +248,10 @@ public final class AssetTransferTest {
     }
 
     @Nested
-    class UpdateAssetTransaction {
+    class UpdateLoanTransaction {
 
         @Test
-        public void whenAssetExists() {
+        public void whenLoanExists() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -265,7 +265,7 @@ public final class AssetTransferTest {
         }
 
         @Test
-        public void whenAssetDoesNotExist() {
+        public void whenLoanDoesNotExist() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);
@@ -283,10 +283,10 @@ public final class AssetTransferTest {
     }
 
     @Nested
-    class DeleteAssetTransaction {
+    class DeleteLoanTransaction {
 
         @Test
-        public void whenAssetDoesNotExist() {
+        public void whenLoanDoesNotExist() {
             AssetTransfer contract = new AssetTransfer();
             Context ctx = mock(Context.class);
             ChaincodeStub stub = mock(ChaincodeStub.class);

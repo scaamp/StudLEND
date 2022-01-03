@@ -101,3 +101,5 @@ Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to
 	at java.base/java.security.cert.CertPathBuilder.build(CertPathBuilder.java:297)
 	at java.base/sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:434)
 	... 33 more
+ERROR	2022-01-03 14:57:12,638	0	org.hyperledger.fabric_ca.sdk.HFCAClient	[main]	org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException: Unable to add CA certificate, can't open certificate file C:\Users\jkupi\OneDrive\Dokumenty\GitHub\StudLEND\application-java\..\..\test-network\organizations\peerOrganizations\org1.example.com\ca\ca.org1.example.com-cert.pem
+ERROR	2022-01-03 15:00:15,121	0	org.hyperledger.fabric_ca.sdk.HFCAClient	[main]	org.hyperledger.fabric_ca.sdk.exception.InvalidArgumentException: Unable to add CA certificate, can't open certificate file C:\Users\jkupi\OneDrive\Dokumenty\GitHub\StudLEND\application-java\..\..\test-network\organizations\peerOrganizations\org1.example.com\ca\ca.org1.example.com-cert.pem
