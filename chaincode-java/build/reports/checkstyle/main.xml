@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.21">
-<file name="C:\Users\jkupi\OneDrive\Dokumenty\GitHub\StudLEND\chaincode-java\src\main\java\org\hyperledger\fabric\samples\assettransfer\Asset.java">
+<file name="C:\Users\jkupi\fabric-samples\asset-transfer-basic\chaincode-java\src\main\java\org\hyperledger\fabric\samples\assettransfer\Loan.java">
 </file>
-<file name="C:\Users\jkupi\OneDrive\Dokumenty\GitHub\StudLEND\chaincode-java\src\main\java\org\hyperledger\fabric\samples\assettransfer\AssetTransfer.java">
+<file name="C:\Users\jkupi\fabric-samples\asset-transfer-basic\chaincode-java\src\main\java\org\hyperledger\fabric\samples\assettransfer\LoanTransfer.java">
 </file>
 </checkstyle>

@@ -1,5 +1,5 @@
-org/hyperledger/fabric/samples/assettransfer/AssetTransfer.java
- org.hyperledger.fabric.samples.assettransfer.AssetTransfer
- org.hyperledger.fabric.samples.assettransfer.AssetTransfer$AssetTransferErrors
-org/hyperledger/fabric/samples/assettransfer/Asset.java
- org.hyperledger.fabric.samples.assettransfer.Asset
+org/hyperledger/fabric/samples/assettransfer/Loan.java
+ org.hyperledger.fabric.samples.assettransfer.Loan
+org/hyperledger/fabric/samples/assettransfer/LoanTransfer.java
+ org.hyperledger.fabric.samples.assettransfer.LoanTransfer
+ org.hyperledger.fabric.samples.assettransfer.LoanTransfer$LoanTransferErrors
