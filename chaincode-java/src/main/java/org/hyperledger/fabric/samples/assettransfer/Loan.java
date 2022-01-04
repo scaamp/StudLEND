@@ -54,12 +54,12 @@ public final class Loan {
         return percent;
     }
 
-    public Loan(@JsonProperty("loanID") final String loanID, @JsonProperty("lenderID") final String lenderID,
-            @JsonProperty("borrowerID") final String borrowerID, @JsonProperty("amount") final int amount,
-            @JsonProperty("days") final int days, @JsonProperty("percent") final double percent) {
+    public Loan(@JsonProperty("loanID") final String loanID, @JsonProperty("borrowerID") final String borrowerID,
+                @JsonProperty("lenderID") final String lenderID, @JsonProperty("amount") final int amount,
+                @JsonProperty("days") final int days, @JsonProperty("percent") final double percent) {
         this.loanID = loanID;
-        this.lenderID = lenderID;
         this.borrowerID = borrowerID;
+        this.lenderID = lenderID;
         this.amount = amount;
         this.days = days;
         this.percent = percent;
@@ -69,8 +69,8 @@ public final class Loan {
                 @JsonProperty("amount") final int amount, @JsonProperty("days") final int days,
                 @JsonProperty("percent") final double percent) {
         this.loanID = loanID;
-        this.lenderID = null;
         this.borrowerID = borrowerID;
+        this.lenderID = null;
         this.amount = amount;
         this.days = days;
         this.percent = percent;

@@ -78,7 +78,7 @@ public final class LoanTransfer implements ContractInterface {
      * @return the created loan
      */
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public Loan CreateLoan(final Context ctx, final String loanID, final String lenderID, final int amount,
+    public Loan CreateLoan(final Context ctx, final String loanID, final String borrowerID, final int amount,
         final int days, final double percent) {
         ChaincodeStub stub = ctx.getStub();
 
@@ -88,7 +88,7 @@ public final class LoanTransfer implements ContractInterface {
             throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_ALREADY_EXISTS.toString());
         }
 
-        Loan loan = new Loan(loanID, lenderID, amount, days, percent);
+        Loan loan = new Loan(loanID, borrowerID, amount, days, percent);
         //Use Genson to convert the Loan into string, sort it alphabetically and serialize it into a json string
         String sortedJson = genson.serialize(loan);
         stub.putStringState(loanID, sortedJson);
@@ -190,7 +190,7 @@ public final class LoanTransfer implements ContractInterface {
      * @return the old owner
      */
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public String TransferLoan(final Context ctx, final String loanID, final String borrower) {
+    public String TransferLoan(final Context ctx, final String loanID, final String lender) {
         ChaincodeStub stub = ctx.getStub();
         String loanJSON = stub.getStringState(loanID);
 
@@ -202,12 +202,12 @@ public final class LoanTransfer implements ContractInterface {
 
         Loan loan = genson.deserialize(loanJSON, Loan.class);
 
-        Loan newLoan = new Loan(loan.getLoanID(), loan.getLenderID(), borrower, loan.getAmount(), loan.getDays(), loan.getPercent());
+        Loan newLoan = new Loan(loan.getLoanID(), loan.getBorrowerID(), lender, loan.getAmount(), loan.getDays(), loan.getPercent());
         //Use a Genson to conver the Loan into string, sort it alphabetically and serialize it into a json string
         String sortedJson = genson.serialize(newLoan);
         stub.putStringState(loanID, sortedJson);
 
-        return loan.getBorrowerID();
+        return lender;
     }
 
     /**
