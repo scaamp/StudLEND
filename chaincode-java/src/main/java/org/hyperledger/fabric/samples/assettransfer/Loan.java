@@ -65,17 +65,6 @@ public final class Loan {
         this.percent = percent;
     }
 
-    public Loan(@JsonProperty("loanID") final String loanID, @JsonProperty("borrowerID") final String borrowerID,
-                @JsonProperty("amount") final int amount, @JsonProperty("days") final int days,
-                @JsonProperty("percent") final double percent) {
-        this.loanID = loanID;
-        this.borrowerID = borrowerID;
-        this.lenderID = null;
-        this.amount = amount;
-        this.days = days;
-        this.percent = percent;
-    }
-
 //    @Override
 //    public boolean equals(final Object obj) {
 //        if (this == obj) {

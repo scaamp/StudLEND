@@ -55,15 +55,9 @@ public final class LoanTransfer implements ContractInterface {
     public void InitLedger(final Context ctx) {
         ChaincodeStub stub = ctx.getStub();
 
-        CreateLoan(ctx, "1", "2", 2000, 30, 5);
-        CreateLoan(ctx, "2", "1", 3000, 15, 3);
-        CreateLoan(ctx, "3", "3", 500, 10, 6);
-//        CreateLoan(ctx, "loan2", "red", 5, "Brad", 400);
-//        CreateLoan(ctx, "loan3", "green", 10, "Jin Soo", 500);
-//        CreateLoan(ctx, "loan4", "yellow", 10, "Max", 600);
-//        CreateLoan(ctx, "loan5", "black", 15, "Adrian", 700);
-//        CreateLoan(ctx, "loan6", "white", 15, "Michel", 700);
-
+        CreateLoan(ctx, "1", "2", null, 2000, 30, 5);
+        CreateLoan(ctx, "2", "1", "1", 3000, 15, 3);
+        CreateLoan(ctx, "3", "3", "5", 500, 10, 6);
     }
 
     /**
@@ -78,7 +72,7 @@ public final class LoanTransfer implements ContractInterface {
      * @return the created loan
      */
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public Loan CreateLoan(final Context ctx, final String loanID, final String borrowerID, final int amount,
+    public Loan CreateLoan(final Context ctx, final String loanID, final String borrowerID, final String lenderID, final int amount,
         final int days, final double percent) {
         ChaincodeStub stub = ctx.getStub();
 
@@ -88,7 +82,7 @@ public final class LoanTransfer implements ContractInterface {
             throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_ALREADY_EXISTS.toString());
         }
 
-        Loan loan = new Loan(loanID, borrowerID, amount, days, percent);
+        Loan loan = new Loan(loanID, borrowerID, lenderID, amount, days, percent);
         //Use Genson to convert the Loan into string, sort it alphabetically and serialize it into a json string
         String sortedJson = genson.serialize(loan);
         stub.putStringState(loanID, sortedJson);
@@ -117,35 +111,6 @@ public final class LoanTransfer implements ContractInterface {
         Loan loan = genson.deserialize(loanJSON, Loan.class);
         return loan;
     }
-
-    /**
-     * Updates the properties of an loan on the ledger.
-     *
-     * @param ctx the transaction context
-     * @param loanID the ID of the loan being updated
-     * @param color the color of the loan being updated
-     * @param size the size of the loan being updated
-     * @param owner the owner of the loan being updated
-     * @param appraisedValue the appraisedValue of the loan being updated
-     * @return the transferred loan
-     */
-//    @Transaction(intent = Transaction.TYPE.SUBMIT)
-//    public Loan UpdateLoan(final Context ctx, final String loanID, final String color, final int size,
-//        final String owner, final int appraisedValue) {
-//        ChaincodeStub stub = ctx.getStub();
-//
-//        if (!LoanExists(ctx, loanID)) {
-//            String errorMessage = String.format("Loan %s does not exist", loanID);
-//            System.out.println(errorMessage);
-//            throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_NOT_FOUND.toString());
-//        }
-//
-//        Loan newLoan = new Loan(loanID, color, size, owner, appraisedValue);
-//        //Use Genson to convert the Loan into string, sort it alphabetically and serialize it into a json string
-//        String sortedJson = genson.serialize(newLoan);
-//        stub.putStringState(loanID, sortedJson);
-//        return newLoan;
-//    }
 
     /**
      * Deletes loan on the ledger.
@@ -190,7 +155,7 @@ public final class LoanTransfer implements ContractInterface {
      * @return the old owner
      */
     @Transaction(intent = Transaction.TYPE.SUBMIT)
-    public String TransferLoan(final Context ctx, final String loanID, final String lender) {
+    public String TransferLoan(final Context ctx, final String loanID, final String lender, final int amount) {
         ChaincodeStub stub = ctx.getStub();
         String loanJSON = stub.getStringState(loanID);
 
@@ -202,13 +167,42 @@ public final class LoanTransfer implements ContractInterface {
 
         Loan loan = genson.deserialize(loanJSON, Loan.class);
 
-        Loan newLoan = new Loan(loan.getLoanID(), loan.getBorrowerID(), lender, loan.getAmount(), loan.getDays(), loan.getPercent());
+        Loan newLoan = new Loan(loan.getLoanID(), loan.getBorrowerID(), lender, amount, loan.getDays(), loan.getPercent());
         //Use a Genson to conver the Loan into string, sort it alphabetically and serialize it into a json string
         String sortedJson = genson.serialize(newLoan);
         stub.putStringState(loanID, sortedJson);
 
         return lender;
     }
+
+//    /**
+//     * Updates the properties of an loan on the ledger.
+//     *
+//     * @param ctx the transaction context
+//     * @param loanID the ID of the loan being updated
+//     * @param color the color of the loan being updated
+//     * @param size the size of the loan being updated
+//     * @param owner the owner of the loan being updated
+//     * @param appraisedValue the appraisedValue of the loan being updated
+//     * @return the transferred loan
+//     */
+//    @Transaction(intent = Transaction.TYPE.SUBMIT)
+//    public Loan UpdateLoan(final Context ctx, final String loanID, final String borrowerID, final String lenderID,
+//                           final int amount, final int days, double percent) {
+//        ChaincodeStub stub = ctx.getStub();
+//
+//        if (!LoanExists(ctx, loanID)) {
+//            String errorMessage = String.format("Loan %s does not exist", loanID);
+//            System.out.println(errorMessage);
+//            throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_NOT_FOUND.toString());
+//        }
+//
+//        Loan newLoan = new Loan(loanID, color, size, owner, appraisedValue);
+//        //Use Genson to convert the Loan into string, sort it alphabetically and serialize it into a json string
+//        String sortedJson = genson.serialize(newLoan);
+//        stub.putStringState(loanID, sortedJson);
+//        return newLoan;
+//    }
 
     /**
      * Retrieves all loans from the ledger.
