@@ -1,5 +1,17 @@
-org/hyperledger/fabric/samples/assettransfer/Loan.java
- org.hyperledger.fabric.samples.assettransfer.Loan
-org/hyperledger/fabric/samples/assettransfer/LoanTransfer.java
- org.hyperledger.fabric.samples.assettransfer.LoanTransfer
- org.hyperledger.fabric.samples.assettransfer.LoanTransfer$LoanTransferErrors
+org/jkupis/studlend/Borrower.java
+ org.jkupis.studlend.Borrower
+org/jkupis/studlend/Address.java
+ org.jkupis.studlend.Address
+org/jkupis/studlend/Lender.java
+ org.jkupis.studlend.Lender
+org/jkupis/studlend/ProposalOperations.java
+ org.jkupis.studlend.ProposalOperations
+org/jkupis/studlend/Student.java
+ org.jkupis.studlend.Student
+org/jkupis/studlend/Proposal.java
+ org.jkupis.studlend.Proposal
+org/jkupis/studlend/Loan.java
+ org.jkupis.studlend.Loan
+org/jkupis/studlend/LoanOperations.java
+ org.jkupis.studlend.LoanOperations
+ org.jkupis.studlend.LoanOperations$LoanTransferErrors

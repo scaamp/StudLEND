@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Loan.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">basic</a> &gt; <a href="index.source.html" class="el_package">org.jkupis.studlend</a> &gt; <span class="el_source">Loan.java</span></div><h1>Loan.java</h1><pre class="source lang-java linenums">/*
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package org.jkupis.studlend;
+
+import org.hyperledger.fabric.contract.annotation.DataType;
+import org.hyperledger.fabric.contract.annotation.Property;
+
+import com.owlike.genson.annotation.JsonProperty;
+
+@DataType()
+public final class Loan {
+
+    @Property()
+    private final String loanID;
+
+    @Property()
+    private final String borrowerID;
+
+    @Property()
+    private final String lenderID;
+
+    @Property
+    private final int amount;
+
+    @Property()
+    private final int days;
+
+    @Property()
+    private final double percent;
+
+    public String getLoanID() {
+<span class="nc" id="L34">        return loanID;</span>
+    }
+
+    public String getBorrowerID() {
+<span class="nc" id="L38">        return borrowerID;</span>
+    }
+
+    public String getLenderID() {
+<span class="nc" id="L42">        return lenderID;</span>
+    }
+
+    public int getAmount() {
+<span class="nc" id="L46">        return amount;</span>
+    }
+
+    public int getDays() {
+<span class="nc" id="L50">        return days;</span>
+    }
+
+    public double getPercent() {
+<span class="nc" id="L54">        return percent;</span>
+    }
+
+    public Loan(@JsonProperty(&quot;loanID&quot;) final String loanID, @JsonProperty(&quot;borrowerID&quot;) final String borrowerID,
+                @JsonProperty(&quot;lenderID&quot;) final String lenderID, @JsonProperty(&quot;amount&quot;) final int amount,
+<span class="nc" id="L59">                @JsonProperty(&quot;days&quot;) final int days, @JsonProperty(&quot;percent&quot;) final double percent) {</span>
+<span class="nc" id="L60">        this.loanID = loanID;</span>
+<span class="nc" id="L61">        this.borrowerID = borrowerID;</span>
+<span class="nc" id="L62">        this.lenderID = lenderID;</span>
+<span class="nc" id="L63">        this.amount = amount;</span>
+<span class="nc" id="L64">        this.days = days;</span>
+<span class="nc" id="L65">        this.percent = percent;</span>
+<span class="nc" id="L66">    }</span>
+
+//    @Override
+//    public boolean equals(final Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//
+//        if ((obj == null) || (getClass() != obj.getClass())) {
+//            return false;
+//        }
+//
+//        Loan other = (Loan) obj;
+//
+//        return Objects.deepEquals(
+//                new String[] {getLoanID(), getColor(), getOwner()},
+//                new String[] {other.getLoanID(), other.getColor(), other.getOwner()})
+//                &amp;&amp;
+//                Objects.deepEquals(
+//                new int[] {getSize(), getAppraisedValue()},
+//                new int[] {other.getSize(), other.getAppraisedValue()});
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(getLoanID(), getColor(), getSize(), getOwner(), getAppraisedValue());
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return this.getClass().getSimpleName() + &quot;@&quot; + Integer.toHexString(hashCode()) + &quot; [loanID=&quot; + loanID + &quot;, color=&quot;
+//                + color + &quot;, size=&quot; + size + &quot;, owner=&quot; + owner + &quot;, appraisedValue=&quot; + appraisedValue + &quot;]&quot;;
+//    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

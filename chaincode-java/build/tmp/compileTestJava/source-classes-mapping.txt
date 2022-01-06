@@ -1,4 +1,4 @@
-org/hyperledger/fabric/samples/assettransfer/LoanTest.java
- org.hyperledger.fabric.samples.assettransfer.LoanTest
-org/hyperledger/fabric/samples/assettransfer/LoanTransferTest.java
- org.hyperledger.fabric.samples.assettransfer.LoanTransferTest
+org/jkupis/studlend/LoanTest.java
+ org.jkupis.studlend.LoanTest
+org/jkupis/studlend/LoanOperationsTest.java
+ org.jkupis.studlend.LoanOperationsTest

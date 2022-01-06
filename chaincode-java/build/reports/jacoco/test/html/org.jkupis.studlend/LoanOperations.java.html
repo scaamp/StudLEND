@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="pl"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoanOperations.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">basic</a> &gt; <a href="index.source.html" class="el_package">org.jkupis.studlend</a> &gt; <span class="el_source">LoanOperations.java</span></div><h1>LoanOperations.java</h1><pre class="source lang-java linenums">/*
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package org.jkupis.studlend;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+import org.hyperledger.fabric.contract.Context;
+import org.hyperledger.fabric.contract.ContractInterface;
+import org.hyperledger.fabric.contract.annotation.Contact;
+import org.hyperledger.fabric.contract.annotation.Contract;
+import org.hyperledger.fabric.contract.annotation.Default;
+import org.hyperledger.fabric.contract.annotation.Info;
+import org.hyperledger.fabric.contract.annotation.License;
+import org.hyperledger.fabric.contract.annotation.Transaction;
+import org.hyperledger.fabric.shim.ChaincodeException;
+import org.hyperledger.fabric.shim.ChaincodeStub;
+import org.hyperledger.fabric.shim.ledger.KeyValue;
+import org.hyperledger.fabric.shim.ledger.QueryResultsIterator;
+
+import com.owlike.genson.Genson;
+
+@Contract(
+        name = &quot;basic&quot;,
+        info = @Info(
+                title = &quot;Loan Transfer&quot;,
+                description = &quot;The hyperlegendary loan transfer&quot;,
+                version = &quot;0.0.1-SNAPSHOT&quot;,
+                license = @License(
+                        name = &quot;Apache 2.0 License&quot;,
+                        url = &quot;http://www.apache.org/licenses/LICENSE-2.0.html&quot;),
+                contact = @Contact(
+                        email = &quot;a.transfer@example.com&quot;,
+                        name = &quot;Adrian Transfer&quot;,
+                        url = &quot;https://hyperledger.example.com&quot;)))
+@Default
+<span class="nc" id="L40">public final class LoanOperations implements ContractInterface {</span>
+
+<span class="nc" id="L42">    private final Genson genson = new Genson();</span>
+
+<span class="nc" id="L44">    private enum LoanTransferErrors {</span>
+<span class="nc" id="L45">        ASSET_NOT_FOUND,</span>
+<span class="nc" id="L46">        ASSET_ALREADY_EXISTS</span>
+    }
+
+    /**
+     * Creates some initial loans on the ledger.
+     *
+     * @param ctx the transaction context
+     */
+    @Transaction(intent = Transaction.TYPE.SUBMIT)
+    public void InitLedger(final Context ctx) {
+<span class="nc" id="L56">        ChaincodeStub stub = ctx.getStub();</span>
+
+<span class="nc" id="L58">        CreateLoan(ctx, &quot;1&quot;, &quot;2&quot;, null, 2000, 30, 5);</span>
+<span class="nc" id="L59">        CreateLoan(ctx, &quot;2&quot;, &quot;1&quot;, null, 3000, 15, 3);</span>
+<span class="nc" id="L60">        CreateLoan(ctx, &quot;3&quot;, &quot;3&quot;, null, 500, 10, 6);</span>
+<span class="nc" id="L61">    }</span>
+
+    /**
+     * Creates a new loan on the ledger.
+     *
+     * @param ctx the transaction context
+     * @param loanID the ID of the new loan
+//     * @param color the color of the new loan
+//     * @param size the size for the new loan
+//     * @param owner the owner of the new loan
+//     * @param appraisedValue the appraisedValue of the new loan
+     * @return the created loan
+     */
+    @Transaction(intent = Transaction.TYPE.SUBMIT)
+    public Loan CreateLoan(final Context ctx, final String loanID, final String borrowerID, final String lenderID, final int amount,
+        final int days, final double percent) {
+<span class="nc" id="L77">        ChaincodeStub stub = ctx.getStub();</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        if (LoanExists(ctx, loanID)) {</span>
+<span class="nc" id="L80">            String errorMessage = String.format(&quot;Loan %s already exists&quot;, loanID);</span>
+<span class="nc" id="L81">            System.out.println(errorMessage);</span>
+<span class="nc" id="L82">            throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_ALREADY_EXISTS.toString());</span>
+        }
+
+<span class="nc" id="L85">        Loan loan = new Loan(loanID, borrowerID, lenderID, amount, days, percent);</span>
+        //Use Genson to convert the Loan into string, sort it alphabetically and serialize it into a json string
+<span class="nc" id="L87">        String sortedJson = genson.serialize(loan);</span>
+<span class="nc" id="L88">        stub.putStringState(loanID, sortedJson);</span>
+
+<span class="nc" id="L90">        return loan;</span>
+    }
+
+    /**
+     * Retrieves an loan with the specified ID from the ledger.
+     *
+     * @param ctx the transaction context
+     * @param loanID the ID of the loan
+     * @return the loan found on the ledger if there was one
+     */
+    @Transaction(intent = Transaction.TYPE.EVALUATE)
+    public Loan ReadLoan(final Context ctx, final String loanID) {
+<span class="nc" id="L102">        ChaincodeStub stub = ctx.getStub();</span>
+<span class="nc" id="L103">        String loanJSON = stub.getStringState(loanID);</span>
+
+<span class="nc bnc" id="L105" title="All 4 branches missed.">        if (loanJSON == null || loanJSON.isEmpty()) {</span>
+<span class="nc" id="L106">            String errorMessage = String.format(&quot;Loan %s does not exist&quot;, loanID);</span>
+<span class="nc" id="L107">            System.out.println(errorMessage);</span>
+<span class="nc" id="L108">            throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_NOT_FOUND.toString());</span>
+        }
+
+<span class="nc" id="L111">        Loan loan = genson.deserialize(loanJSON, Loan.class);</span>
+<span class="nc" id="L112">        return loan;</span>
+    }
+
+    /**
+     * Deletes loan on the ledger.
+     *
+     * @param ctx the transaction context
+     * @param loanID the ID of the loan being deleted
+     */
+    @Transaction(intent = Transaction.TYPE.SUBMIT)
+    public void DeleteLoan(final Context ctx, final String loanID) {
+<span class="nc" id="L123">        ChaincodeStub stub = ctx.getStub();</span>
+
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (!LoanExists(ctx, loanID)) {</span>
+<span class="nc" id="L126">            String errorMessage = String.format(&quot;Loan %s does not exist&quot;, loanID);</span>
+<span class="nc" id="L127">            System.out.println(errorMessage);</span>
+<span class="nc" id="L128">            throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_NOT_FOUND.toString());</span>
+        }
+
+<span class="nc" id="L131">        stub.delState(loanID);</span>
+<span class="nc" id="L132">    }</span>
+
+    /**
+     * Checks the existence of the loan on the ledger
+     *
+     * @param ctx the transaction context
+     * @param loanID the ID of the loan
+     * @return boolean indicating the existence of the loan
+     */
+    @Transaction(intent = Transaction.TYPE.EVALUATE)
+    public boolean LoanExists(final Context ctx, final String loanID) {
+<span class="nc" id="L143">        ChaincodeStub stub = ctx.getStub();</span>
+<span class="nc" id="L144">        String loanJSON = stub.getStringState(loanID);</span>
+
+<span class="nc bnc" id="L146" title="All 4 branches missed.">        return (loanJSON != null &amp;&amp; !loanJSON.isEmpty());</span>
+    }
+
+    /**
+     * Changes the owner of a loan on the ledger.
+     *
+     * @param ctx the transaction context
+     * @param loanID the ID of the loan being transferred
+//     * @param newOwner the new owner
+     * @return the old owner
+     */
+    @Transaction(intent = Transaction.TYPE.SUBMIT)
+    public String giveLoan(final Context ctx, final String loanID, final String lender, final int amount) {
+<span class="nc" id="L159">        ChaincodeStub stub = ctx.getStub();</span>
+<span class="nc" id="L160">        String loanJSON = stub.getStringState(loanID);</span>
+
+<span class="nc bnc" id="L162" title="All 4 branches missed.">        if (loanJSON == null || loanJSON.isEmpty()) {</span>
+<span class="nc" id="L163">            String errorMessage = String.format(&quot;Loan %s does not exist&quot;, loanID);</span>
+<span class="nc" id="L164">            System.out.println(errorMessage);</span>
+<span class="nc" id="L165">            throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_NOT_FOUND.toString());</span>
+        }
+
+<span class="nc" id="L168">        Loan loan = genson.deserialize(loanJSON, Loan.class);</span>
+
+<span class="nc" id="L170">        Loan newLoan = new Loan(loan.getLoanID(), loan.getBorrowerID(), lender, amount, loan.getDays(), loan.getPercent());</span>
+        //Use a Genson to conver the Loan into string, sort it alphabetically and serialize it into a json string
+<span class="nc" id="L172">        String sortedJson = genson.serialize(newLoan);</span>
+<span class="nc" id="L173">        stub.putStringState(loanID, sortedJson);</span>
+
+<span class="nc" id="L175">        return lender;</span>
+    }
+
+//    /**
+//     * Updates the properties of an loan on the ledger.
+//     *
+//     * @param ctx the transaction context
+//     * @param loanID the ID of the loan being updated
+//     * @param color the color of the loan being updated
+//     * @param size the size of the loan being updated
+//     * @param owner the owner of the loan being updated
+//     * @param appraisedValue the appraisedValue of the loan being updated
+//     * @return the transferred loan
+//     */
+//    @Transaction(intent = Transaction.TYPE.SUBMIT)
+//    public Loan UpdateLoan(final Context ctx, final String loanID, final String borrowerID, final String lenderID,
+//                           final int amount, final int days, double percent) {
+//        ChaincodeStub stub = ctx.getStub();
+//
+//        if (!LoanExists(ctx, loanID)) {
+//            String errorMessage = String.format(&quot;Loan %s does not exist&quot;, loanID);
+//            System.out.println(errorMessage);
+//            throw new ChaincodeException(errorMessage, LoanTransferErrors.ASSET_NOT_FOUND.toString());
+//        }
+//
+//        Loan newLoan = new Loan(loanID, color, size, owner, appraisedValue);
+//        //Use Genson to convert the Loan into string, sort it alphabetically and serialize it into a json string
+//        String sortedJson = genson.serialize(newLoan);
+//        stub.putStringState(loanID, sortedJson);
+//        return newLoan;
+//    }
+
+    /**
+     * Retrieves all loans from the ledger.
+     *
+     * @param ctx the transaction context
+     * @return array of loans found on the ledger
+     */
+    @Transaction(intent = Transaction.TYPE.EVALUATE)
+    public String GetAllLoans(final Context ctx) {
+<span class="nc" id="L215">        ChaincodeStub stub = ctx.getStub();</span>
+
+<span class="nc" id="L217">        List&lt;Loan&gt; queryResults = new ArrayList&lt;Loan&gt;();</span>
+
+        // To retrieve all loans from the ledger use getStateByRange with empty startKey &amp; endKey.
+        // Giving empty startKey &amp; endKey is interpreted as all the keys from beginning to end.
+        // As another example, if you use startKey = 'loan0', endKey = 'loan9' ,
+        // then getStateByRange will retrieve loan with keys between loan0 (inclusive) and loan9 (exclusive) in lexical order.
+<span class="nc" id="L223">        QueryResultsIterator&lt;KeyValue&gt; results = stub.getStateByRange(&quot;&quot;, &quot;&quot;);</span>
+
+<span class="nc bnc" id="L225" title="All 2 branches missed.">        for (KeyValue result: results) {</span>
+<span class="nc" id="L226">            Loan loan = genson.deserialize(result.getStringValue(), Loan.class);</span>
+<span class="nc" id="L227">            System.out.println(loan);</span>
+<span class="nc" id="L228">            queryResults.add(loan);</span>
+<span class="nc" id="L229">        }</span>
+
+<span class="nc" id="L231">        final String response = genson.serialize(queryResults);</span>
+
+<span class="nc" id="L233">        return response;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

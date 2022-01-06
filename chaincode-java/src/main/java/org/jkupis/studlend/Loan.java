@@ -1,0 +1,99 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+package org.jkupis.studlend;
+
+import org.hyperledger.fabric.contract.annotation.DataType;
+import org.hyperledger.fabric.contract.annotation.Property;
+
+import com.owlike.genson.annotation.JsonProperty;
+
+@DataType()
+public final class Loan {
+
+    @Property()
+    private final String loanID;
+
+    @Property()
+    private final String borrowerID;
+
+    @Property()
+    private final String lenderID;
+
+    @Property
+    private final double amount;
+
+    @Property()
+    private final int days;
+
+    @Property()
+    private final double percent;
+
+    public String getLoanID() {
+        return loanID;
+    }
+
+    public String getBorrowerID() {
+        return borrowerID;
+    }
+
+    public String getLenderID() {
+        return lenderID;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public int getDays() {
+        return days;
+    }
+
+    public double getPercent() {
+        return percent;
+    }
+
+    public Loan(@JsonProperty("loanID") final String loanID, @JsonProperty("borrowerID") final String borrowerID,
+                @JsonProperty("lenderID") final String lenderID, @JsonProperty("amount") final double amount,
+                @JsonProperty("days") final int days, @JsonProperty("percent") final double percent) {
+        this.loanID = loanID;
+        this.borrowerID = borrowerID;
+        this.lenderID = lenderID;
+        this.amount = amount;
+        this.days = days;
+        this.percent = percent;
+    }
+
+//    @Override
+//    public boolean equals(final Object obj) {
+//        if (this == obj) {
+//            return true;
+//        }
+//
+//        if ((obj == null) || (getClass() != obj.getClass())) {
+//            return false;
+//        }
+//
+//        Loan other = (Loan) obj;
+//
+//        return Objects.deepEquals(
+//                new String[] {getLoanID(), getColor(), getOwner()},
+//                new String[] {other.getLoanID(), other.getColor(), other.getOwner()})
+//                &&
+//                Objects.deepEquals(
+//                new int[] {getSize(), getAppraisedValue()},
+//                new int[] {other.getSize(), other.getAppraisedValue()});
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(getLoanID(), getColor(), getSize(), getOwner(), getAppraisedValue());
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return this.getClass().getSimpleName() + "@" + Integer.toHexString(hashCode()) + " [loanID=" + loanID + ", color="
+//                + color + ", size=" + size + ", owner=" + owner + ", appraisedValue=" + appraisedValue + "]";
+//    }
+}
